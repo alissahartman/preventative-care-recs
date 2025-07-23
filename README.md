@@ -1,4 +1,4 @@
-# Project Title: Personalized Preventive Care Recommendations Using Clustering and Power BI
+# Personalized Preventive Care Recommendations Using Clustering and Power BI
 
 ---
 

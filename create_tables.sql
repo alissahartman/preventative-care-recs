@@ -50,6 +50,13 @@ MEDREIMB_CAR	VARCHAR (255)	,
 BENRES_CAR	VARCHAR (255)	,
 PPPYMT_CAR	VARCHAR (255)	);
 
+--remove leading zeros in sp_state_code
+UPDATE beneficiary_summary
+SET sp_state_code = TRIM(LEADING '0' FROM sp_state_code)
+WHERE sp_state_code LIKE '0%';
+
+SELECT DISTINCT sp_state_code FROM beneficiary_summary WHERE sp_state_code LIKE '0%';
+
 --INPATIENT CLAIMS
 CREATE TABLE INPATIENT_CLAIMS (		
 DESYNPUF_ID	VARCHAR (255)	,

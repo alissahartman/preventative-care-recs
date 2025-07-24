@@ -219,3 +219,75 @@ HCPCS_CD_42	VARCHAR (255)	,
 HCPCS_CD_43	VARCHAR (255)	,
 HCPCS_CD_44	VARCHAR (255)	,
 HCPCS_CD_45	VARCHAR (255)	);
+
+--Create combined claims table for PowerBI connection
+--only 2010 data from patients who had coverage the whole year
+
+CREATE TABLE ALL_CLAIMS AS (
+
+WITH ip AS(
+SELECT
+a.desynpuf_id
+,clm_id
+,'Inpatient' as claim_type
+,clm_from_dt
+,clm_thru_dt
+,prvdr_num
+,c.state_name as state
+,a.icd9_dgns_cd_1
+,d.dgns_desc as diagnosis_1
+,a.icd9_dgns_cd_2
+,e.dgns_desc as diagnosis_2
+,a.icd9_prcdr_cd_1
+,f.prcdr_desc as procedure_1
+,a.icd9_prcdr_cd_2
+,g.prcdr_desc as procedure_2
+,clm_pmt_amt
+FROM inpatient_claims a
+LEFT JOIN beneficiary_summary b ON a.desynpuf_id = b.desynpuf_id
+LEFT JOIN state_codes c ON b.sp_state_code = c.state_code
+LEFT JOIN dgns_codes d ON a.icd9_dgns_cd_1 = d.dgns_cd 
+LEFT JOIN dgns_codes e ON a.icd9_dgns_cd_2 = e.dgns_cd 
+LEFT JOIN prcdr_codes f ON a.icd9_prcdr_cd_1 = f.prcdr_cd 
+LEFT JOIN prcdr_codes g ON a.icd9_prcdr_cd_2 = g.prcdr_cd 
+WHERE clm_from_dt >= '2010-01-01'
+AND bene_hi_cvrage_tot_mons = '12'
+AND bene_smi_cvrage_tot_mons = '12'
+),
+
+op AS (
+SELECT
+a.desynpuf_id
+,clm_id
+,'Outpatient' as claim_type
+,clm_from_dt
+,clm_thru_dt
+,prvdr_num
+,c.state_name as state
+,a.icd9_dgns_cd_1
+,d.dgns_desc as diagnosis_1
+,a.icd9_dgns_cd_2
+,e.dgns_desc as diagnosis_2
+,a.icd9_prcdr_cd_1
+,f.prcdr_desc as procedure_1
+,a.icd9_prcdr_cd_2
+,g.prcdr_desc as procedure_2
+,clm_pmt_amt
+FROM outpatient_claims a
+LEFT JOIN beneficiary_summary b ON a.desynpuf_id = b.desynpuf_id
+LEFT JOIN state_codes c ON b.sp_state_code = c.state_code
+LEFT JOIN dgns_codes d ON a.icd9_dgns_cd_1 = d.dgns_cd
+LEFT JOIN dgns_codes e ON a.icd9_dgns_cd_2 = e.dgns_cd
+LEFT JOIN prcdr_codes f ON a.icd9_prcdr_cd_1 = f.prcdr_cd
+LEFT JOIN prcdr_codes g ON a.icd9_prcdr_cd_2 = g.prcdr_cd
+WHERE clm_from_dt >= '2010-01-01'
+AND bene_hi_cvrage_tot_mons = '12'
+AND bene_smi_cvrage_tot_mons = '12'
+)
+
+SELECT * FROM ip
+UNION ALL
+SELECT * FROM op
+);
+
+SELECT DISTINCT hcpcs_cd_1 FROM outpatient_claims;

@@ -223,24 +223,37 @@ HCPCS_CD_45	VARCHAR (255)	);
 --Create combined claims table for PowerBI connection
 --only 2010 data from patients who had coverage the whole year
 
+DROP TABLE ALL_CLAIMS;
+
 CREATE TABLE ALL_CLAIMS AS (
 
 WITH ip AS(
 SELECT
 a.desynpuf_id
+,bene_sex_ident_cd as sex
+,bene_race_cd as race
+,bene_birth_dt as birthdate
+,bene_esrd_ind as end_stg_renal_disease
+,sp_alzhdmta as alzheimer
+,sp_chf as heart_failure
+,sp_copd as chron_obstructive_pulm_disease
+,sp_chrnkidn as chron_kidney_disease
+,sp_cncr as cancer
+,sp_depressn as depression
+,sp_diabetes as diabetes
+,sp_ischmcht as ischemic_heart_disease
+,sp_osteoprs as osteoporosis
+,sp_ra_oa as rheumatoid_arthritis
+,sp_strketia as stroke
 ,clm_id
 ,'Inpatient' as claim_type
 ,clm_from_dt
 ,clm_thru_dt
 ,prvdr_num
 ,c.state_name as state
-,a.icd9_dgns_cd_1
 ,d.dgns_desc as diagnosis_1
-,a.icd9_dgns_cd_2
 ,e.dgns_desc as diagnosis_2
-,a.icd9_prcdr_cd_1
 ,f.prcdr_desc as procedure_1
-,a.icd9_prcdr_cd_2
 ,g.prcdr_desc as procedure_2
 ,clm_pmt_amt
 FROM inpatient_claims a
@@ -258,19 +271,30 @@ AND bene_smi_cvrage_tot_mons = '12'
 op AS (
 SELECT
 a.desynpuf_id
+,bene_sex_ident_cd as sex
+,bene_race_cd as race
+,bene_birth_dt as birthdate
+,bene_esrd_ind as end_stg_renal_disease
+,sp_alzhdmta as alzheimer
+,sp_chf as heart_failure
+,sp_copd as chron_obstructive_pulm_disease
+,sp_chrnkidn as chron_kidney_disease
+,sp_cncr as cancer
+,sp_depressn as depression
+,sp_diabetes as diabetes
+,sp_ischmcht as ischemic_heart_disease
+,sp_osteoprs as osteoporosis
+,sp_ra_oa as rheumatoid_arthritis
+,sp_strketia as stroke
 ,clm_id
 ,'Outpatient' as claim_type
 ,clm_from_dt
 ,clm_thru_dt
 ,prvdr_num
 ,c.state_name as state
-,a.icd9_dgns_cd_1
 ,d.dgns_desc as diagnosis_1
-,a.icd9_dgns_cd_2
 ,e.dgns_desc as diagnosis_2
-,a.icd9_prcdr_cd_1
 ,f.prcdr_desc as procedure_1
-,a.icd9_prcdr_cd_2
 ,g.prcdr_desc as procedure_2
 ,clm_pmt_amt
 FROM outpatient_claims a
@@ -284,10 +308,7 @@ WHERE clm_from_dt >= '2010-01-01'
 AND bene_hi_cvrage_tot_mons = '12'
 AND bene_smi_cvrage_tot_mons = '12'
 )
-
 SELECT * FROM ip
 UNION ALL
 SELECT * FROM op
 );
-
-SELECT DISTINCT hcpcs_cd_1 FROM outpatient_claims;

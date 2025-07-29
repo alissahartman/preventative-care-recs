@@ -232,7 +232,7 @@ SELECT
 a.desynpuf_id
 ,bene_sex_ident_cd as sex
 ,bene_race_cd as race
-,bene_birth_dt as birthdate
+,EXTRACT(YEAR FROM age('2010-12-31',bene_birth_dt)) as age
 ,bene_esrd_ind as end_stg_renal_disease
 ,sp_alzhdmta as alzheimer
 ,sp_chf as heart_failure
@@ -273,7 +273,7 @@ SELECT
 a.desynpuf_id
 ,bene_sex_ident_cd as sex
 ,bene_race_cd as race
-,bene_birth_dt as birthdate
+,EXTRACT(YEAR FROM age('2010-12-31',bene_birth_dt)) as age
 ,bene_esrd_ind as end_stg_renal_disease
 ,sp_alzhdmta as alzheimer
 ,sp_chf as heart_failure
@@ -312,3 +312,6 @@ SELECT * FROM ip
 UNION ALL
 SELECT * FROM op
 );
+
+ALTER TABLE all_claims
+ALTER COLUMN age TYPE integer;

@@ -46,10 +46,9 @@ Use **unsupervised learning (KMeans)** to cluster patients by utilization patter
 - Total annual cost
 - Number of preventive visits
 - Number of chronic conditions
-- Number of ER visits
 - Number of inpatient stays
 
-**Goal**: Identify 3–6 meaningful clusters (e.g., high utilizers with chronic conditions, young healthy non-users).
+**Goal**: Identify 3–6 meaningful clusters (e.g., high utilizers with chronic conditions).
 
 ---
 

@@ -44,11 +44,9 @@ Use **unsupervised learning (KMeans)** to cluster patients by utilization patter
 **Key Variables**:
 
 - Total annual cost
-- Number of preventive visits
-- Number of chronic conditions
-- Number of inpatient stays
+- Age & Sex
 
-**Goal**: Identify 3–6 meaningful clusters (e.g., high utilizers with chronic conditions).
+**Goal**: Identified 3 meaningful clusters.
 
 ---
 
@@ -56,10 +54,9 @@ Use **unsupervised learning (KMeans)** to cluster patients by utilization patter
 
 For each cluster, compare recommended guidelines (e.g., USPSTF or CMS quality measures) to actual utilization. Identify gaps.
 
-**Examples**:
-
-- Cluster A (young women): Low Pap smear screening → recommend reminder system
-- Cluster B (older adults): High chronic burden, low wellness visits → recommend outreach program
+- Cluster A, White Males: 
+- Cluster B, Black Females: 
+- Cluster C, White Females: 
 
 ---
 
